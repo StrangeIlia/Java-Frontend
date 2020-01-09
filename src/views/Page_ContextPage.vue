@@ -84,11 +84,20 @@
                 if(this.username() !== "")
                 {
                     if(this.isDisliked) this.rating.disliked -= 1;
-                    this.rating.liked += 1;
 
-                    this.isLiked = true;
+
+
                     this.isDisliked = false;
-                    HTTP.post('/videos/liked?id=' + this.$props.id, {value: 1});
+                    if(this.isLiked){
+                        this.rating.liked -= 1;
+                        this.isLiked = false;
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value: -1});
+                    }
+                    else {
+                        this.rating.liked += 1;
+                        this.isLiked = true;
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value: 1});
+                    }
                 }
             },
             dislike : function () {
@@ -97,11 +106,18 @@
                 if(this.username() !== "")
                 {
                     if(this.isLiked) this.rating.liked -= 1;
-                    this.rating.disliked += 1;
 
                     this.isLiked = false;
-                    this.isDisliked = true;
-                    HTTP.post('/videos/liked?id=' + this.$props.id, {value : 0});
+                    if(this.isDisliked){
+                        this.rating.disliked -= 1;
+                        this.isDisliked = false;
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value : -1});
+                    }
+                    else{
+                        this.rating.disliked += 1;
+                        this.isDisliked = true;
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value : 0});
+                    }
                 }
             },
             username : function () {

@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import ContextPage from "../views/ContextPage";
-import FavoriteVideos from "../views/FavoriteVideos";
-import LoadedVideos from "../views/LoadedVideos";
-import Playlists from "../views/Playlists";
-import UserPage from "../views/UserPage";
-import Test from "../views/Test";
+import Home from '../views/Page_Home.vue'
+import ContextPage from "../views/Page_ContextPage";
+import FavoriteVideos from "../views/Page_FavoriteVideos";
+import UserPage from "../views/Rage_UserPage";
 import Page_DeleteVideo from "../views/Page_DeleteVideo";
 import Page_UpdateVideo from "../views/Page_UpdateVideo";
+import Page_Playlist from "../views/Page_Playlist";
 
 Vue.use(VueRouter);
 
@@ -17,11 +15,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: Test
   },
   {
     path: '/video/:id',
@@ -33,16 +26,6 @@ const routes = [
     path: "/favorite_videos",
     name: 'favorite_videos',
     component: FavoriteVideos
-  },
-  {
-    path: "/loaded_videos",
-    name: 'loaded_videos',
-    component: LoadedVideos
-  },
-  {
-    path: "/user_playlists",
-    name: 'user_playlists',
-    component: Playlists
   },
   {
     path: '/user_page/:username',
@@ -58,6 +41,11 @@ const routes = [
     path: '/delete_video',
     name: 'delete_video',
     component: Page_DeleteVideo
+  },
+  {
+    path: '/playlists/:playlistId',
+    name: 'playlists',
+    component: Page_Playlist
   }
 ];
 

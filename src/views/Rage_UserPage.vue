@@ -2,15 +2,23 @@
     <div>
         <h1 class="m-auto text-center">Это страница пользователя {{username}}</h1>
         <div class="album py-5" style="display: flex; flex-direction: column; align-items: center;">
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#favorits" role="tab" aria-controls="favorits" aria-selected="true">Понравившееся</a>
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#loads" role="tab" aria-controls="loads" aria-selected="false">Загруженные</a>
-                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#playlists" role="tab" aria-controls="playlists" aria-selected="false">Плейлисты</a>
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-                <div class="tab-pane fade show active" id="favorits" role="tabpanel" aria-labelledby="favorits-tab">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#panel1">Понравившееся видео</a></li>
+                <li><a data-toggle="tab" href="#panel2">Добавленные видео</a></li>
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        Другие панели
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a data-toggle="tab" href="#panel3">Панель 3</a></li>
+                        <li><a data-toggle="tab" href="#panel4">Панель 4</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="panel1" class="tab-pane fade in active">
                     <div class="album py-5">
                         <div class="container">
                             <div class="row">
@@ -30,7 +38,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="loads" role="tabpanel" aria-labelledby="loads-tab">
+                <div id="panel2" class="tab-pane fade">
                     <div class="album py-5">
                         <div class="container">
                             <div class="row">
@@ -50,10 +58,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="playlists" role="tabpanel" aria-labelledby="playlists-tab"></div>
+                <div id="panel3" class="tab-pane fade">
+                    <h3>Панель 3</h3>
+                    <p>Содержимое 3 панели...</p>
+                </div>
+                <div id="panel4" class="tab-pane fade">
+                    <h3>Панель 4</h3>
+                    <p>Содержимое 4 панели...</p>
+                </div>
             </div>
-
-
         </div>
     </div>
 </template>

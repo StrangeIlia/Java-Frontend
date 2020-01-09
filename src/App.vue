@@ -87,6 +87,7 @@
     },
 
     methods: {
+
       show_AddNewVideo : function() {
         this.modal.addNewVideo = true;
       },
