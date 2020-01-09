@@ -12,38 +12,57 @@
             <div class="row align-items-baseline justify-content-between">
                 <div class="mr-auto">{{video.numberOfViews}} просмотров (последнее обновление {{video.updatedAt}})</div>
                 <div class="form-group">
-                    <button class="btn" v-bind:class="{'btn-success': isLiked, 'btn-default': !isLiked}" @click="like">Понравилось {{rating.liked}}</button>
-                    <button class="btn" v-bind:class="{'btn-danger': isDisliked, 'btn-default': !isDisliked}" @click="dislike">Не понравилось {{rating.disliked}}</button>
+
+                    <button class="btn" v-bind:class="{'btn-success': isLiked, 'btn-default': !isLiked}" @click="like">
+                        Понравилось {{rating.liked}}
+                    </button>
+                    <button class="btn" v-bind:class="{'btn-danger': isDisliked, 'btn-default': !isDisliked}"
+                            @click="dislike">Не понравилось {{rating.disliked}}
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="col" style="border-bottom: solid 1px black; min-width: 100%; ">
-            <div class="row">
-                <div class="mr-auto">Добавил пользователь:
-                    <router-link :to="{name: 'user_page', params:{username:video.author}}">{{video.author}}</router-link>
-                </div >
-            </div>
-            <div class="row">
-                Описание: &#160;
-                <div v-if="video.description !== null && video.description !== ''">
-                    {{video.description}}
+        <div class="row justify-content-between" style="border-bottom: solid 1px black; min-width: 100%; ">
+            <div class="col">
+                <div class="row">
+                    <div class="mr-auto">Добавил пользователь:
+                        <router-link :to="{name: 'user_page', params:{username:video.author}}">{{video.author}}
+                        </router-link>
+                    </div>
                 </div>
-                <div v-else>
-                    У видео нет описания
+                <div class="row">
+                    Описание: &#32;
+                    <div v-if="video.description !== null && video.description !== ''">
+                        {{video.description}}
+                    </div>
+                    <div v-else>
+                        У видео нет описания
+                    </div>
                 </div>
             </div>
+            <button v-if="username()!= ''" class="btn btn-info" @click="openModal_AddInPlaylist">Добавить в плейлист
+            </button>
         </div>
+
+        <Modal_AddInPlaylist ref="addInPlaylists" v-show="modal.modal_AddInPlaylist" v-bind:videoId="video.id"
+                             @close="closeModal_AddInPlaylist"/>
+
     </div>
 </template>
 
 <script>
-    import { HTTP } from "../components/http";
+    import {HTTP} from "../components/http";
+    import Modal_AddInPlaylist from "../components/Modal_AddInPlaylist";
+
     export default {
         name: 'Video',
         props: ['id'],
-        data () {
-            return{
+        components: {
+            Modal_AddInPlaylist
+        },
+        data() {
+            return {
                 video: {
                     id: 0,
                     name: "",
@@ -57,6 +76,9 @@
                 rating: {
                     liked: 0,
                     disliked: 0
+                },
+                modal: {
+                    modal_AddInPlaylist: false
                 },
                 isLiked: false,
                 isDisliked: false
@@ -84,9 +106,6 @@
                 if(this.username() !== "")
                 {
                     if(this.isDisliked) this.rating.disliked -= 1;
-
-
-
                     this.isDisliked = false;
                     if(this.isLiked){
                         this.rating.liked -= 1;
@@ -111,16 +130,22 @@
                     if(this.isDisliked){
                         this.rating.disliked -= 1;
                         this.isDisliked = false;
-                        HTTP.post('/videos/liked?id=' + this.$props.id, {value : -1});
-                    }
-                    else{
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value: -1});
+                    } else {
                         this.rating.disliked += 1;
                         this.isDisliked = true;
-                        HTTP.post('/videos/liked?id=' + this.$props.id, {value : 0});
+                        HTTP.post('/videos/liked?id=' + this.$props.id, {value: 0});
                     }
                 }
             },
-            username : function () {
+            openModal_AddInPlaylist: function () {
+                this.modal.modal_AddInPlaylist = true;
+                this.$refs.addInPlaylists.createForm();
+            },
+            closeModal_AddInPlaylist: function () {
+                this.modal.modal_AddInPlaylist = false;
+            },
+            username: function () {
                 return this.$root.username;
             }
         }
