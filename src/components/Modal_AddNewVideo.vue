@@ -1,6 +1,6 @@
 <template>
     <transition name="modal_addNewVideo">
-        <form>
+        <div v-bind:class="{'disabled' : sendData}">
             <div class="modal-mask" v-if="result === ''">
                 <div class="modal-wrapper">
                     <div class="modal-container">
@@ -9,7 +9,8 @@
                                 <div class="form-group">
                                     <div>
                                         <label for="video_name">Введите название видео</label>
-                                        <input id="video_name" type="text" class="form-control w-100" placeholder="Название" v-model="name">
+                                        <input id="video_name" type="text" class="form-control w-100"
+                                               placeholder="Название" v-model="name">
                                         <div class="error" v-if="invalidVideoName">
                                             <div v-if="!$v.name.required">Введите название видео</div>
                                             <div v-if="!$v.name.minLength">Название видео должно быть не меньше 5 символов</div>
@@ -48,7 +49,7 @@
 
                         <div class="modal-footer">
                             <slot name="footer">
-                                <button type="submit" class="modal-default-button" @click="addVideo" :disabled="sendData">
+                                <button type="submit" class="modal-default-button" @click="addVideo">
                                     Добавление видео
                                 </button>
                                 <button class="modal-default-button" @click="close">
@@ -75,12 +76,13 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </transition>
 </template>
 
 <script>
     import {HTTP} from "./http";
+
     const { required, minLength, maxLength } = require('vuelidate/lib/validators');
 
     export default {

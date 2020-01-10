@@ -1,6 +1,6 @@
 <template>
-    <transition name="modal_addNewVideo">
-        <form>
+    <transition name="modal_addVideoInPlaylist">
+        <div>
             <div class="modal-mask" v-if="result === ''">
                 <div class="modal-wrapper">
                     <div class="modal-container">
@@ -79,7 +79,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </transition>
 </template>
 
@@ -108,6 +108,9 @@
         methods: {
             createForm: function () {
                 if (this.username !== null && this.username !== '') {
+                    this.result = "";
+                    this.playlistName = "";
+
                     this.selectedPlaylist = {
                         name: 'Выберите плейлист'
                     };

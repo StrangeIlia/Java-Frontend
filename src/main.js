@@ -31,7 +31,10 @@ export let MainVue = new Vue({
               this.username = response.data.username;
               if (this.username === null || this.username === undefined)
                   this.username = '';
-          }).catch(() => delete localStorage.token);
+          }).catch(() => {
+              delete localStorage.token;
+              this.username = '';
+          });
       } else this.username = '';
     }
   },

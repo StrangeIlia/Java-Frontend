@@ -54,12 +54,13 @@
                         <div class="container">
                             <div class="col">
                                 <div class="list-group align-items-center">
-                                    <div class="list-group-item d-flex justify-content-between align-items-center"
-                                         v-for="playlist in playlists" :key="playlist.id"
-                                         style="min-width: 50%"
-                                    >
-                                        {{playlist.name}}
-                                        <span class="badge badge-primary badge-pill">{{playlist.countVideo}}</span>
+                                    <div v-for="playlist in playlists" :key="playlist.id" style="min-width: 50%">
+                                        <router-link :to="{name: 'playlists', params:{playlistId: playlist.id}}">
+                                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                {{playlist.name}}
+                                                <span class="badge badge-primary badge-pill">{{playlist.countVideo}}</span>
+                                            </div>
+                                        </router-link>
                                     </div>
                                 </div>
                             </div>

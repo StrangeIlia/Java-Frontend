@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="m-auto text-center">Это плейлист пользователя {{playlist.name}}</h1>
+        <h1 class="m-auto text-center">Это плейлист "{{playlist.name}}"</h1>
         <h1 class="m-auto text-center">Создатель этого плейлиста:
             <router-link  :to="{name: 'user_page', params:{username:playlist.author}}">{{playlist.author}}</router-link>
         </h1>
@@ -26,11 +26,12 @@
 </template>
 
 <script>
-    import { HTTP } from "../components/http";
+    import {HTTP} from "../components/http";
+
     export default {
-        name: 'Videos',
-        data () {
-            return{
+        name: 'Playlists',
+        data() {
+            return {
                 playlist: {
                     author: "",
                     name: "",
@@ -40,8 +41,8 @@
         },
 
         created() {
-            HTTP.get('playlists/view?=' + this.playlistId).then(response => this.playlist = response.data )
-            HTTP.get('playlists/videos?=' + this.playlistId).then(response => this.videos = response.data );
+            HTTP.get('playlists/view?id=' + this.playlistId).then(response => this.playlist = response.data)
+            HTTP.get('playlists/videos?id=' + this.playlistId).then(response => this.videos = response.data);
         },
 
         computed: {

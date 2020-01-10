@@ -135,8 +135,8 @@
                 }
             },
             openModal_AddInPlaylist: function () {
-                this.modal.modal_AddInPlaylist = true;
                 this.$refs.addInPlaylists.createForm();
+                this.modal.modal_AddInPlaylist = true;
             },
             closeModal_AddInPlaylist: function () {
                 this.modal.modal_AddInPlaylist = false;

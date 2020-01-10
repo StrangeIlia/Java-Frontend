@@ -7,10 +7,10 @@
           <div class="navbar-nav ml-auto">
             <div v-if="!this.isRegOrAuth">
               <div class="content">
-                <button @click="show_Authoriztion" class="btn btn-primary m-auto">Вход</button>
+                <button @click="show_Authorization" class="btn btn-primary m-auto">Вход</button>
                 <button @click="show_Registration" class="btn btn-primary m-auto">Регистрация</button>
               </div>
-              <modal_authoriztion v-show="modal.authorization" @close="close_Authoriztion"/>
+              <modal_authorization v-show="modal.authorization" @close="close_Authorization"/>
               <modal_registration v-show="modal.registration" @close="close_Registration"/>
             </div>
             <div v-if="this.$root.successAuth">
@@ -32,11 +32,13 @@
                       <button class="dropdown-item">Удалить видео</button>
                     </router-link>
                   </div>
-                  <button class="dropdown-item">Добавить плейлист</button>
+                  <button @click="show_PlaylistManager" class="dropdown-item">Менеджер плейлистов</button>
                   <button class="dropdown-item" @click="logout">Выход</button>
                 </div>
               </div>
               <modal_addNewVideo v-show="modal.addNewVideo" @close="close_AddNewVideo"/>
+              <modal_playlistManager ref="modalPlaylistManager" v-show="modal.playlistManager"
+                                     @close="close_PlaylistManager"/>
             </div>
           </div>
         </div>
@@ -56,16 +58,18 @@
 <script>
   import {HTTP} from "./components/http";
   import modal_addNewVideo from './components/Modal_AddNewVideo.vue';
-  import modal_authoriztion from './components/Modal_Authorization.vue';
-  import modal_registration from  './components/Modal_Registration.vue';
+  import modal_authorization from './components/Modal_Authorization.vue';
+  import modal_registration from './components/Modal_Registration.vue';
+  import modal_playlistManager from "./components/Modal_PlaylistManager";
 
   export default {
     name: 'App',
 
     components: {
       modal_addNewVideo,
-      modal_authoriztion,
-      modal_registration
+      modal_authorization,
+      modal_registration,
+      modal_playlistManager
     },
 
     data() {
@@ -73,7 +77,8 @@
         modal: {
           addNewVideo: false,
           authorization: false,
-          registration: false
+          registration: false,
+          playlistManager: false
         },
       }
     },
@@ -96,25 +101,34 @@
         this.modal.addNewVideo = false;
       },
 
-      show_Authoriztion : function() {
+      show_Authorization: function () {
         this.modal.authorization = true;
       },
 
-      close_Authoriztion : function() {
+      close_Authorization: function () {
         this.modal.authorization = false;
       },
 
-      show_Registration : function() {
+      show_Registration: function () {
         this.modal.registration = true;
       },
 
-      close_Registration : function() {
+      close_Registration: function () {
         this.modal.registration = false;
       },
 
-      logout : function () {
+      show_PlaylistManager: function () {
+        this.$refs.modalPlaylistManager.createForm();
+        this.modal.playlistManager = true;
+      },
+
+      close_PlaylistManager: function () {
+        this.modal.playlistManager = false;
+      },
+
+      logout: function () {
         HTTP.post('/site/logout').then(response => {
-          if(response.data.status === 'success'){
+          if (response.data.status === 'success') {
             this.$root.username = '';
             delete localStorage.token;
             delete HTTP.defaults.headers['Authorization'];
