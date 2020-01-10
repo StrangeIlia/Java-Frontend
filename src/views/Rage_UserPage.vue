@@ -5,16 +5,7 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a data-toggle="tab" href="#panel1">Понравившееся видео</a></li>
                 <li><a data-toggle="tab" href="#panel2">Добавленные видео</a></li>
-                <li class="dropdown">
-                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
-                        Другие панели
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a data-toggle="tab" href="#panel3">Панель 3</a></li>
-                        <li><a data-toggle="tab" href="#panel4">Панель 4</a></li>
-                    </ul>
-                </li>
+                <li><a data-toggle="tab" href="#panel3">Созданные плейлисты</a></li>
             </ul>
 
             <div class="tab-content">
@@ -59,12 +50,21 @@
                     </div>
                 </div>
                 <div id="panel3" class="tab-pane fade">
-                    <h3>Панель 3</h3>
-                    <p>Содержимое 3 панели...</p>
-                </div>
-                <div id="panel4" class="tab-pane fade">
-                    <h3>Панель 4</h3>
-                    <p>Содержимое 4 панели...</p>
+                    <div class="album py-5">
+                        <div class="container">
+                            <div class="col">
+                                <div class="list-group align-items-center">
+                                    <div class="list-group-item d-flex justify-content-between align-items-center"
+                                         v-for="playlist in playlists" :key="playlist.id"
+                                         style="min-width: 50%"
+                                    >
+                                        {{playlist.name}}
+                                        <span class="badge badge-primary badge-pill">{{playlist.countVideo}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,9 +87,11 @@
 
         created() {
             HTTP.get("users/loaded_video?username=" + this.username)
-                .then( response => this.loaded_video = response.data )
+                .then(response => this.loaded_video = response.data)
             HTTP.get("users/favorite_video?username=" + this.username)
-                .then( response => this.favorite_video = response.data )
+                .then(response => this.favorite_video = response.data)
+            HTTP.get("users/playlists?username=" + this.username)
+                .then(response => this.playlists = response.data)
         },
 
         computed: {
