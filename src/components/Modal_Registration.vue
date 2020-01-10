@@ -28,7 +28,8 @@
                                     <div class="error" v-if="invalidRepeatPassword">Пароли должны совпадать</div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-success w-100" @click="registration">Зарегистрироваться</button>
+                                    <button class="btn btn-success w-100" @click="registration">Зарегистрироваться
+                                    </button>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary w-100" @click="close">Вернуться на главную страницу</button>
@@ -43,13 +44,14 @@
 </template>
 
 <script>
-    import { HTTP } from "../components/http";
-    const { required, maxLength, sameAs } = require('vuelidate/lib/validators');
+    import {HTTP} from "../components/http";
+
+    const {required, maxLength, sameAs} = require('vuelidate/lib/validators');
 
     export default {
         name: 'Modal_Registration',
 
-        data(){
+        data() {
             return {
                 username: "",
                 email: "",

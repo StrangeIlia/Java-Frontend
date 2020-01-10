@@ -27,18 +27,18 @@ export let MainVue = new Vue({
     getUserName: async function()
     {
       if (localStorage.token !== undefined) {
-        await HTTP.get('/site/get_username').then(response => {
-          this.username = response.data.username;
-          if(this.username === null)
-            this.username === '';
-        }).catch(() => delete localStorage.token);
-      }
+          await HTTP.get('/site/get_username').then(response => {
+              this.username = response.data.username;
+              if (this.username === null || this.username === undefined)
+                  this.username = '';
+          }).catch(() => delete localStorage.token);
+      } else this.username = '';
     }
   },
 
   computed: {
     successAuth : function () {
-      return this.username !== null && this.username !== '';
+        return this.username !== '';
     }
   }
 

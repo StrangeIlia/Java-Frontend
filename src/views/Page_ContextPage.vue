@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <button v-if="username()!= ''" class="btn btn-info" @click="openModal_AddInPlaylist">Добавить в плейлист
+            <button v-if="validUsername" class="btn btn-info" @click="openModal_AddInPlaylist">Добавить в плейлист
             </button>
         </div>
 
@@ -88,12 +88,11 @@
         created() {
             HTTP.get('/videos/view?id=' + this.$props.id).then(response => (this.video = response.data))
             HTTP.get('/videos/rating?id=' + this.$props.id).then(response => (this.rating = response.data))
-            if(this.username() !== "")
-            {
+            if (this.validUsername) {
                 HTTP.get('/videos/liked?id=' + this.$props.id).then(response => {
-                    if(response.data.liked === 'like')
+                    if (response.data.liked === 'like')
                         this.isLiked = true;
-                    else if(response.data.liked === 'dislike')
+                    else if (response.data.liked === 'dislike')
                         this.isDisliked = true;
                 })
             }
@@ -101,18 +100,16 @@
 
         methods: {
             like : function () {
-                if(this.username() === "")
+                if (this.username === "")
                     this.$parent.show_Authoriztion();//к сожалению с inject не разобрался (provide в App добавлял, но все равно не хочет работать)
-                if(this.username() !== "")
-                {
-                    if(this.isDisliked) this.rating.disliked -= 1;
+                if (this.username !== "") {
+                    if (this.isDisliked) this.rating.disliked -= 1;
                     this.isDisliked = false;
-                    if(this.isLiked){
+                    if (this.isLiked) {
                         this.rating.liked -= 1;
                         this.isLiked = false;
                         HTTP.post('/videos/liked?id=' + this.$props.id, {value: -1});
-                    }
-                    else {
+                    } else {
                         this.rating.liked += 1;
                         this.isLiked = true;
                         HTTP.post('/videos/liked?id=' + this.$props.id, {value: 1});
@@ -120,14 +117,13 @@
                 }
             },
             dislike : function () {
-                if(this.username() === "")
+                if (this.username === "")
                     this.$parent.show_Authoriztion();
-                if(this.username() !== "")
-                {
-                    if(this.isLiked) this.rating.liked -= 1;
+                if (this.username !== "") {
+                    if (this.isLiked) this.rating.liked -= 1;
 
                     this.isLiked = false;
-                    if(this.isDisliked){
+                    if (this.isDisliked) {
                         this.rating.disliked -= 1;
                         this.isDisliked = false;
                         HTTP.post('/videos/liked?id=' + this.$props.id, {value: -1});
@@ -144,9 +140,15 @@
             },
             closeModal_AddInPlaylist: function () {
                 this.modal.modal_AddInPlaylist = false;
-            },
+            }
+
+        },
+        computed: {
             username: function () {
                 return this.$root.username;
+            },
+            validUsername: function () {
+                return this.username !== '' && this.username !== undefined;
             }
         }
     }

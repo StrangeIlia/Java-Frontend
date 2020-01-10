@@ -34,7 +34,7 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 <div v-for="playlist in playlists" :key="playlist.id">
-                                                    <a class="dropdown-item" @click="selectPlaylist = playlist">{{playlist.name}}</a>
+                                                    <a class="dropdown-item" @click="changeSelectedPlaylist(playlist)">{{playlist.name}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +96,8 @@
                 selectedPlaylist: null,
                 playlistName: "",
                 result: "",
-                selectPlaylist: true
+                selectPlaylist: true,
+                currentPlaylistName: ""
             }
         },
 
@@ -105,16 +106,23 @@
         },
 
         methods: {
-            createForm() {
+            createForm: function () {
                 if (this.username !== null && this.username !== '') {
-                    HTTP.post("playlists/create", {
-                        name: this.playlistName
-                    }).then(
+                    this.selectedPlaylist = {
+                        name: 'Выберите плейлист'
+                    };
+
+                    HTTP.get("users/playlists?username=" + this.username).then(
                         response => {
                             this.playlists = response.data;
+                            this.playlists.unshift(this.selectedPlaylist);
                         }
                     ).catch();
                 }
+            },
+
+            changeSelectedPlaylist: function (playlists) {
+                this.selectedPlaylist = playlists;
             },
 
             selector: function () {
@@ -125,18 +133,21 @@
             },
 
             addPlaylist: function () {
-                HTTP.post("playlists/create?name=" + this.playlistName).then(
+                HTTP.post("playlists/create", {
+                    name: this.playlistName
+                }).then(
                     response => {
                         if (response.data.status === 'success') {
                             this.selectedPlaylist = response.data.playlist;
                             this.addVideo();
                         } else this.result = response.data.error;
                     }
-                );
+                ).catch();
             },
             addVideo: function () {
-                HTTP.post("playlists/addVideo?playlistId=" + this.playlistName +
-                    "&videoId=" + this.videoId).then(
+                if (this.selectedPlaylist.id === undefined) return;
+                HTTP.post("playlists/add_video?videoId=" + this.videoId +
+                    "&playlistId=" + this.selectedPlaylist.id).then(
                     response => {
                         if (response.data.status === 'success') {
                             this.result = 'Видео успешно добавлено в плейлист';
@@ -149,14 +160,13 @@
             },
         },
         computed: {
-            currentPlaylistName: function () {
-                if (this.selectedPlaylist == null)
-                    return 'Выберите плейлист';
-                else
-                    return this.selectedPlaylist.name;
-            },
             username: function () {
                 return this.$root.username;
+            }
+        },
+        watch: {
+            selectedPlaylist: function (val) {
+                this.currentPlaylistName = val.name;
             }
         }
     }
